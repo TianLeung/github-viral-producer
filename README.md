@@ -6,25 +6,33 @@
 **✅ 支持 macOS / Windows 双平台**：`install.py` 会自动识别系统、找到 WorkBuddy 技能目录、
 把 `python3`/路径/盘符等平台差异一次写对。换电脑只需 clone + 跑一条命令。
 
-**✅ 已打包成 WorkBuddy 专家「爆导」**：也可以不 clone，直接导入
-`dist/github-viral-producer.zip`，专家自带全部 5 个技能。详见下方「换电脑的两条路」。
+**✅ 已打包成两个 WorkBuddy 专家包**：不用 clone、不用装 git，导入 zip 就能用。
+详见下方「换电脑的三条路」。
 
 ---
 
-## 换电脑的两条路（选一条）
+## 换电脑的三条路（选一条）
 
-### 路径 A：导入专家包（推荐，最快，不需要 git）
+### 路径 A：导入「装配工」→ 自动拉最新全套（推荐）
 
-1. 下载 `dist/github-viral-producer.zip`
-2. WorkBuddy → 专家中心 → 我的专家 → **导入**这个 zip
-3. 让 AI 跑一次专家包里的 `sync.py`（把路径占位符写成这台机器的真实值）
-   ```bash
-   python3 sync.py --workspace /你的/工作区    # macOS / Linux
-   python  sync.py --workspace C:\你的\工作区  # Windows
-   ```
-4. 把提示词原文和参考视频放进工作区的 `相关参考提示词/`、`参考视频/`
+`dist/viral-producer-bootstrap.zip` 只有 **20 KB**，里面是一个远程安装技能。
 
-专家自带全部 5 个技能，导入即用。**专家包是"成品快照"**。
+1. WorkBuddy → 专家中心 → 我的专家 → **导入**这个 zip
+2. 对它说一句：**「把爆款生产线装到这台电脑，然后跑一遍」**
+3. 它会自己：从 GitHub 下载全套 → 解压 → 装 5 个技能 → 跑一次抓取验收 → **接着执行产线出成稿**
+
+| 特性 | 说明 |
+|---|---|
+| 需要 git 吗 | **不需要**，纯 HTTP 下载 zip |
+| 需要 Token 吗 | **不需要**（仓库公开即可） |
+| 需要手动拷文件吗 | 不需要 |
+| 版本 | 永远拉 GitHub 上的最新版 |
+| 跨平台 | macOS / Windows 通用，只用 Python 标准库 |
+
+### 路径 B：导入「爆导」完整包 → 离线直接用
+
+`dist/github-viral-producer.zip`（520 KB）自带全部 5 个技能，导入即用，**完全不联网**。
+代价是版本固定在打包那一刻。导入后需跑一次 `sync.py` 写回本机路径。
 
 ### 首次推送到 GitHub（只做一次）
 
@@ -44,7 +52,7 @@ python  setup_github.py            # Windows
 
 推送前会自动扫描，一旦发现 PDF / Pages / MP4 将被上传就**中止**，防止误传私有资产。
 
-### 路径 B：从 GitHub 拉（要最新版 / 要改代码 / 要回滚时）
+### 路径 C：从 GitHub 拉（要改代码 / 要回滚时）
 
 ```bash
 git clone <你的私有仓库> <任意目录>
@@ -94,12 +102,17 @@ python  install.py      # Windows
 │   ├── opensource-video-director/ 开源爆款编导（出三要素分镜表）
 │   ├── colloquial-polisher/       口语化抛光师（只润色口播列）
 │   └── github-viral-pipeline/     编排总控
-├── expert/                     ← 专家包源码「占位符版」，用于重建 zip
-│   └── github-viral-producer/     含 plugin.json / agents / avatars / sync.py
+├── expert/                     ← 专家包源码（用于重建 zip）
+│   ├── github-viral-producer/     完整包「爆导」：自带 5 个技能，离线可用
+│   └── viral-producer-bootstrap/  引导包「装配工」：只有 1 个远程安装技能，20KB
 ├── bootstrap/                  ← 种子技能：换机时装这一个，自动拉回全套
 │   └── viral-producer-sync/
-├── dist/                       ← 构建产物：可直接导入的专家包 zip
-│   └── github-viral-producer.zip
+│       ├── SKILL.md               远程取回 + 执行产线的完整流程
+│       ├── bootstrap.py           下载 / 解压 / 安装 / 验收（跨平台）
+│       └── config.json            仓库坐标（已预置 TianLeung/github-viral-producer）
+├── dist/                       ← 构建产物：两个可直接导入的 zip
+│   ├── github-viral-producer.zip      520 KB，完整版
+│   └── viral-producer-bootstrap.zip    20 KB，引导版
 ├── 相关参考提示词/              ← 数据流：换赛道时替换这里
 ├── 参考视频/                    ← 数据流：换赛道时替换这里
 ├── output/                        成稿（YYYY-MM-DD-项目名-短视频脚本.md）

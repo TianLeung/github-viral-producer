@@ -1,0 +1,55 @@
+{
+  "name": "viral-producer-bootstrap",
+  "version": "1.0.0",
+  "description": "A lightweight installer expert that pulls the full open-source viral short-video pipeline from its GitHub repository, installs it on any machine, and runs it end to end. No git or token required.",
+  "author": {
+    "name": "TianLeung",
+    "email": "tianleung65367@gmail.com"
+  },
+  "agents": ["./agents/viral-producer-bootstrap.md"],
+  "skills": [
+    "./skills/viral-producer-sync"
+  ],
+
+  "expertType": "agent",
+  "agentName": "viral-producer-bootstrap",
+
+  "displayName": {
+    "en": "Fetch",
+    "zh": "装配工"
+  },
+  "profession": {
+    "en": "Pipeline Installer & Runner",
+    "zh": "生产线装配工"
+  },
+  "displayDescription": {
+    "en": "Pulls the viral video pipeline from GitHub, installs it locally, then runs it: fetch, rewrite, storyboard, polish, archive.",
+    "zh": "从 GitHub 拉回爆款生产线并装好，然后直接跑：抓项目、洗稿、出分镜、落盘成稿。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "06-ContentCreative",
+  "defaultInitPrompt": {
+    "zh": "把爆款生产线装到这台电脑，然后跑一遍。",
+    "en": "Install the viral video pipeline on this machine, then run it once."
+  },
+  "plugin": "viral-producer-bootstrap",
+  "tags": [
+    { "en": "One-Click Install", "zh": "一键安装" },
+    { "en": "Cross-Platform", "zh": "跨平台" },
+    { "en": "Remote Sync", "zh": "远程同步" }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "把爆款生产线装到这台电脑，然后跑一遍。",
+      "en": "Install the viral video pipeline on this machine, then run it once."
+    },
+    {
+      "zh": "装好生产线，然后抓最近 7 天的开源项目跑一遍。",
+      "en": "Install the pipeline, then fetch this week's trending repos and run it."
+    },
+    {
+      "zh": "检查这台电脑的生产线装得全不全。",
+      "en": "Check whether the pipeline is fully installed on this machine."
+    }
+  ]
+}
