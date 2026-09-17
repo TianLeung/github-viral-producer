@@ -26,6 +26,24 @@
 
 专家自带全部 5 个技能，导入即用。**专家包是"成品快照"**。
 
+### 首次推送到 GitHub（只做一次）
+
+```bash
+python3 setup_github.py            # macOS / Linux
+python  setup_github.py            # Windows
+```
+
+脚本会请你粘贴一次 Token（输入时不显示），然后自动完成：
+验证 Token → 建仓库 → 推送 → 把 Token 写进 shell 配置 → 验证配额。
+
+| 选项 | 作用 |
+|---|---|
+| `--repo 名字` | 改仓库名，默认 `github-viral-producer` |
+| `--private` | 建私有仓库（默认公开，见下方说明） |
+| `--skip-token-save` | 只推送，不写入 shell 配置 |
+
+推送前会自动扫描，一旦发现 PDF / Pages / MP4 将被上传就**中止**，防止误传私有资产。
+
 ### 路径 B：从 GitHub 拉（要最新版 / 要改代码 / 要回滚时）
 
 ```bash
@@ -52,7 +70,7 @@ python  install.py      # Windows
 |---|---|---|
 | `相关参考提示词/`（5 个 PDF / Pages） | 只在你本机 | ❌ **已排除**（`.gitignore`） |
 | `参考视频/`（2 个 mp4） | 只在你本机 | ❌ **已排除**（`.gitignore`） |
-| `.workbuddy/memory/`（工作日志） | 只在你本机 | ❌ **已排除** |
+| `.workbuddy/cache/`（视频抽帧图等） | 只在你本机 | ❌ **已排除**（他人视频的衍生内容，有版权） |
 | `skills/` `expert/` `bootstrap/`（方法论） | 仓库 | ✅ 可公开 |
 | `output/`（成稿） | 仓库 | ✅ 你自己的内容 |
 
@@ -61,8 +79,8 @@ python  install.py      # Windows
 走网盘 / 移动硬盘 / iCloud 单独拷贝，换机解压到工作区根目录即可。
 加 `--icloud` 可直接复制一份到 iCloud Drive。
 
-已扫描确认：仓库内 **0 个** PDF/Pages/MP4、**0 处**本机绝对路径、**0 个**真实密钥。
-（文档里出现的 `ghp_你的Token` 是示例占位，不是真密钥。）
+已扫描确认：仓库内 **0 个** PDF/Pages/MP4、**0 张**视频抽帧图、**0 处**本机绝对路径、
+**0 个**真实密钥。（文档里出现的 `ghp_你的Token` 是示例占位，不是真密钥。）
 
 ---
 
@@ -160,7 +178,13 @@ python install.py
    ```
    配置后需**重启 WorkBuddy** 才会读到。
 
-   Token 在 https://github.com/settings/tokens 生成，**无需勾选任何 scope**。
+   Token 在 https://github.com/settings/tokens 生成：
+
+   | 你要做什么 | 勾选什么 |
+   |---|---|
+   | 只让抓取脚本不限流 | **一个都不勾**（最安全，只读公开信息够用） |
+   | 还要用 `setup_github.py` 推送代码 | 勾 **repo** |
+
    不配也能跑，但限流 60 次/小时（按出口 IP 共享，容易打满），配后 5000 次/小时。
 
 2. 在 WorkBuddy UI 重建 Automation 定时任务
@@ -186,7 +210,9 @@ python install.py
 | 语速校验（4 字/秒） | ✅ 已脚本化 |
 | 定时任务 Automation | ❌ 未建（需在 WorkBuddy UI 手动建，见配置清单） |
 | 推送到微信 / 飞书 | ❌ 未接，目前只落盘本地 md |
-| GITHUB_TOKEN | ❌ 未配 |
+| GITHUB_TOKEN | ❌ 未配（`setup_github.py` 会顺带配好） |
+| git 身份 | ✅ TianLeung <tianleung65367@gmail.com> |
+| 推送到 GitHub | ⏳ 待执行 `setup_github.py` |
 
 ---
 

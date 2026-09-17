@@ -101,16 +101,29 @@ def get_token(cli_token):
         ok("使用环境变量里已配置的 GITHUB_TOKEN")
         return env
 
+    # 自动打开 Token 生成页，省得自己找路
+    page = "https://github.com/settings/tokens/new?description=workbuddy&scopes=repo"
+    print("\n  正在打开 Token 生成页…")
+    try:
+        if platform.system() == "Darwin":
+            subprocess.run(["open", page], check=False)
+        elif platform.system() == "Windows":
+            subprocess.run(["start", "", page], shell=True, check=False)
+        else:
+            subprocess.run(["xdg-open", page], check=False)
+        ok("浏览器已打开（若没反应，手动访问 github.com/settings/tokens）")
+    except Exception:
+        warn("打不开浏览器，请手动访问 github.com/settings/tokens")
+
     print("\n" + "=" * 62)
     print("  请粘贴你的 GitHub Personal Access Token")
     print("  （输入时屏幕不显示，粘贴后直接回车）")
     print("")
-    print("  还没有？按这个路径生成：")
-    print("    github.com → 右上角头像 ▾ → Settings")
-    print("    → 左侧最底部 Developer settings")
-    print("    → Personal access tokens → Tokens (classic)")
-    print("    → Generate new token (classic)")
-    print("    → 勾选 repo（本脚本建仓库/推送需要）→ Generate")
+    print("  生成步骤（页面已打开，照着点即可）：")
+    print("    1. Note 随便填，比如 workbuddy")
+    print("    2. 勾选 repo（建仓库和推送需要；只要不限流抓取的话可以不勾）")
+    print("    3. 拉到最底点 Generate token")
+    print("    4. 复制那串 ghp_ 开头的字符 —— 只显示这一次")
     print("=" * 62)
     t = getpass.getpass("\n  Token: ").strip()
     if not t:
