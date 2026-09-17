@@ -44,16 +44,25 @@ python  install.py      # Windows
 
 ---
 
-## 🔴 上传前必读：这个仓库必须设为 Private
+## ✅ 关于仓库可见性：现在可以放心 Public
 
-| 内容 | 敏感性 |
-|---|---|
-| `相关参考提示词/`（5 个 PDF / Pages） | **付费或私有知识资产，禁止公开** |
-| `参考视频/`（2 个 mp4） | **他人爆款视频，有版权，禁止公开** |
-| `skills/`（5 个技能） | 纯方法论，可公开 |
-| `output/`（成稿） | 自有内容，自选 |
+仓库**已经不含任何私有资产**，所以 Public / Private 随你选。
 
-创建仓库时务必选 **Private**。
+| 内容 | 在哪 | 是否进 git |
+|---|---|---|
+| `相关参考提示词/`（5 个 PDF / Pages） | 只在你本机 | ❌ **已排除**（`.gitignore`） |
+| `参考视频/`（2 个 mp4） | 只在你本机 | ❌ **已排除**（`.gitignore`） |
+| `.workbuddy/memory/`（工作日志） | 只在你本机 | ❌ **已排除** |
+| `skills/` `expert/` `bootstrap/`（方法论） | 仓库 | ✅ 可公开 |
+| `output/`（成稿） | 仓库 | ✅ 你自己的内容 |
+
+**私有资产怎么换机带走**：跑 `python3 pack_knowledge.py` 打包成
+`dist/knowledge-kit-日期.zip`（约 4 MB，含提示词原文 + 参考视频），
+走网盘 / 移动硬盘 / iCloud 单独拷贝，换机解压到工作区根目录即可。
+加 `--icloud` 可直接复制一份到 iCloud Drive。
+
+已扫描确认：仓库内 **0 个** PDF/Pages/MP4、**0 处**本机绝对路径、**0 个**真实密钥。
+（文档里出现的 `ghp_你的Token` 是示例占位，不是真密钥。）
 
 ---
 
@@ -80,9 +89,10 @@ python  install.py      # Windows
 ├── install.py                     跨平台安装器（单一实现）
 ├── install.sh                     薄封装，仅 macOS / Linux
 ├── build_expert.py                重建专家包 zip
+├── pack_knowledge.py              打包私有知识库（PDF + 视频，不进 git）
 └── .workbuddy/
     ├── cache/                     可重建缓存（提示词提取件、视频抽帧）
-    └── memory/                    工作日志
+    └── memory/                    工作日志（不进 git）
 ```
 
 ### 三个脚本各自干什么
@@ -92,6 +102,7 @@ python  install.py      # Windows
 | `install.py` | 换了新电脑，从 git 恢复 | 装 5 个技能到 `~/.workbuddy/skills/` + 写回本机路径 |
 | `sync.py`（在专家包内） | 导入专家包后 | 把专家包自带技能的占位符写成这台机器的真实值 |
 | `build_expert.py` | 改了 `skills/` 之后 | 从占位符版重建 `dist/*.zip` |
+| `pack_knowledge.py` | 换机 / 备份时 | 把提示词原文 + 参考视频打包带走（不进 git） |
 
 > ⚠️ 别直接打包 `~/.workbuddy/plugins/marketplaces/my-experts/plugins/` 里那份——
 > 它已被 `sync.py` 写死本机路径，换台电脑全错。必须走 `build_expert.py` 重建。
