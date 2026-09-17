@@ -1,6 +1,6 @@
 # 可重建产物
-.workbuddy/cache/prompts-md/
-.workbuddy/cache/video-frames/   # 参考视频抽帧图：他人视频的衍生内容，有版权
+# 注意：Git 的 .gitignore 不支持行尾注释，注释必须独占一行
+.workbuddy/cache/
 **/__pycache__/
 *.pyc
 
