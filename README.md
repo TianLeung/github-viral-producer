@@ -1,7 +1,12 @@
 # GitHub 开源爆款短视频生产线 v2
 
+**仓库地址：https://github.com/TianLeung/github-viral-producer**（公开）
+
 把「GitHub 上新爆的开源项目」自动变成「可直接开拍的短视频分镜脚本」。
 已实跑 4 个真实项目：Mac-Duo、truanayangi、PRINTFILM、gongwen-gbt9704-skill。
+
+> 🔰 **第一次用 / 换了新电脑？** 直接看 `新手激活应用首段话.md`，复制一段话粘贴即可，
+> 不用装 git，不用配账号。
 
 **✅ 支持 macOS / Windows 双平台**：`install.py` 会自动识别系统、找到 WorkBuddy 技能目录、
 把 `python3`/路径/盘符等平台差异一次写对。换电脑只需 clone + 跑一条命令。
@@ -55,18 +60,24 @@ python  setup_github.py            # Windows
 ### 路径 C：从 GitHub 拉（要改代码 / 要回滚时）
 
 ```bash
-git clone <你的私有仓库> <任意目录>
+git clone https://github.com/TianLeung/github-viral-producer.git <任意目录>
 cd <该目录>
 python3 install.py      # macOS / Linux
 python  install.py      # Windows
 ```
+
+连 git 都不想装？在新机器的 WorkBuddy 里直接说一句
+「从这个仓库下载安装：https://github.com/TianLeung/github-viral-producer」
+也行 —— 仓库公开，AI 会自己下载解压安装。现成的话术见
+`新手激活应用首段话.md`。
 
 或者在 WorkBuddy 里装一个种子技能 `bootstrap/viral-producer-sync/`，
 之后说一句「同步一下生产线」它就会自动 clone / pull + 安装。
 
 **git 仓库是"源"**：能拿到最新改动、能回滚（Skill 已改过 4 次）。
 
-> 两条路的关系：日常用 A，改坏了或要升级用 B。
+> 三条路的关系：日常换机用 **A**（最省事），断网或要离线用 **B**，
+> 想改代码 / 回滚版本用 **C**。
 
 ---
 
@@ -116,6 +127,8 @@ python  install.py      # Windows
 ├── 相关参考提示词/              ← 数据流：换赛道时替换这里
 ├── 参考视频/                    ← 数据流：换赛道时替换这里
 ├── output/                        成稿（YYYY-MM-DD-项目名-短视频脚本.md）
+├── 新手激活应用首段话.md           新机器第一次用：复制一段话粘贴即可
+├── 上架操作手册.md                 建仓 / Token / 专家上传的逐字段填写表
 ├── 自动化配置清单.md              WorkBuddy Automation 的 UI 配置步骤
 ├── install.py                     跨平台安装器（单一实现）
 ├── install.sh                     薄封装，仅 macOS / Linux
@@ -146,8 +159,8 @@ python  install.py      # Windows
 ## 换电脑恢复（macOS / Windows 通用，3 步）
 
 ```bash
-# 第 1 步：把私有仓库拉到任意目录
-git clone <你的私有仓库> <任意目录>
+# 第 1 步：把仓库拉到任意目录
+git clone https://github.com/TianLeung/github-viral-producer.git <任意目录>
 cd <该目录>
 
 # 第 2 步：装（二选一，效果完全一样）
@@ -223,9 +236,15 @@ python install.py
 | 语速校验（4 字/秒） | ✅ 已脚本化 |
 | 定时任务 Automation | ❌ 未建（需在 WorkBuddy UI 手动建，见配置清单） |
 | 推送到微信 / 飞书 | ❌ 未接，目前只落盘本地 md |
-| GITHUB_TOKEN | ❌ 未配（`setup_github.py` 会顺带配好） |
 | git 身份 | ✅ TianLeung <tianleung65367@gmail.com> |
-| 推送到 GitHub | ⏳ 待执行 `setup_github.py` |
+| 推送到 GitHub | ✅ 已上线：**github.com/TianLeung/github-viral-producer**（公开） |
+| GITHUB_TOKEN | ✅ 已写入 `~/.zshrc`（配额 5000 次/小时） |
+| 免 Token 下载安装 | ✅ 实测通过，5/5 技能就位 |
+
+**忘了怎么操作？** 看仓库里这两份，永远是最新的：
+
+- `新手激活应用首段话.md` —— 新机器第一次用，复制一段话粘贴即可
+- `上架操作手册.md` —— 建仓 / Token / 专家上传的逐字段填写对照表
 
 ---
 
