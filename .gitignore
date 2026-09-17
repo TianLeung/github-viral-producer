@@ -1,0 +1,8 @@
+# 可重建产物（由源文件重新提取，不入库）
+.workbuddy/cache/prompts-md/
+**/__pycache__/
+*.pyc
+
+# 系统文件
+.DS_Store
+Thumbs.db

@@ -1,0 +1,59 @@
+{
+  "name": "github-viral-producer",
+  "version": "1.0.0",
+  "description": "An open-source viral video producer that turns newly trending GitHub projects into shoot-ready short-video storyboards: trend radar, resonance rewriting, three-element storyboard table, de-AI polish, speech-rate validation and auto archiving.",
+  "author": {
+    "name": "TianLeung65367",
+    "email": "tianleung65367@foxmail.com"
+  },
+  "agents": ["./agents/github-viral-producer.md"],
+  "skills": [
+    "./skills/github-trend-radar",
+    "./skills/resonance-engine",
+    "./skills/opensource-video-director",
+    "./skills/colloquial-polisher",
+    "./skills/github-viral-pipeline"
+  ],
+
+  "expertType": "agent",
+  "agentName": "github-viral-producer",
+
+  "displayName": {
+    "en": "Boom",
+    "zh": "爆导"
+  },
+  "profession": {
+    "en": "Open-Source Viral Short-Video Producer",
+    "zh": "开源爆款短视频制片人"
+  },
+  "displayDescription": {
+    "en": "Turns newly trending GitHub repos into shoot-ready short-video storyboards: radar sourcing, resonance rewriting, three-element storyboard, de-AI polish, speech-rate check, auto archiving.",
+    "zh": "把新爆开源项目洗稿成能开拍的短视频分镜：抓项目、共鸣提纯、出分镜表、去AI味、校验语速、落盘成稿。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "06-ContentCreative",
+  "defaultInitPrompt": {
+    "zh": "帮我抓最近 7 天爆火的开源项目，挑最适合大众的一个，写一份能直接开拍的短视频分镜脚本。",
+    "en": "Fetch this week's hottest GitHub projects, pick the one with the broadest appeal, and write me a shoot-ready short-video storyboard."
+  },
+  "plugin": "github-viral-producer",
+  "tags": [
+    { "en": "Open-Source Sourcing", "zh": "开源项目选题" },
+    { "en": "Video Storyboard", "zh": "短视频分镜" },
+    { "en": "Viral Rewriting", "zh": "爆款洗稿" }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "帮我抓最近 7 天爆火的开源项目，挑最适合大众的一个，写一份能直接开拍的短视频分镜脚本。",
+      "en": "Fetch this week's hottest GitHub projects, pick the one with the broadest appeal, and write me a shoot-ready short-video storyboard."
+    },
+    {
+      "zh": "照这个 GitHub 项目链接，给我出一版完整的短视频分镜脚本。",
+      "en": "Take this GitHub project link and produce a full short-video storyboard for it."
+    },
+    {
+      "zh": "把这份脚本的口播去一遍 AI 味，并做 4 字/秒语速校验。",
+      "en": "De-AI-polish the narration in this script and run a 4-chars-per-second speech-rate check."
+    }
+  ]
+}

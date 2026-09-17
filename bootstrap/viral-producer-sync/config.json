@@ -1,0 +1,15 @@
+{
+  "repoUrl": "<你的仓库地址>",
+  "branch": "main",
+  "localDir": "<本机存放目录>",
+
+  "_说明": [
+    "第一次使用前把两处占位符换成真实值，以后就不用再填了。",
+    "repoUrl 推荐用 SSH：git@github.com:用户名/仓库名.git（配好 SSH key 后永久免密）",
+    "用 HTTPS 的话：https://github.com/用户名/仓库名.git（私有仓库需要在 URL 里带 Token）",
+    "localDir 本机存放目录：",
+    "  Mac     例：/Users/用户名/GitHub开源工具内容创作",
+    "  Windows 例：C:\\Users\\用户名\\GitHub开源工具内容创作  （注意 Windows 路径要写双斜杠）",
+    "仓库必须是 Private —— 里面有你的提示词原文和参考视频。"
+  ]
+}
