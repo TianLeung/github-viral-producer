@@ -30,6 +30,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -63,27 +64,75 @@ def die(msg, hint=None):
     sys.exit(1)
 
 
-def api(method, path, token, payload=None):
-    """调 GitHub API，返回 (status, data)。"""
+def _curl(method, url, token, payload):
+    """用系统 curl 发请求（能正确吃 http_proxy，比 urllib 稳）。返回 (status, text)。"""
+    cmd = ["curl", "-s", "--max-time", "30", "-X", method, url,
+           "-H", "Accept: application/vnd.github+json",
+           "-H", "User-Agent: workbuddy-setup",
+           "-w", "\n%{http_code}"]
+    if token:
+        cmd += ["-H", "Authorization: Bearer %s" % token]
+    if payload is not None:
+        cmd += ["-H", "Content-Type: application/json",
+                "-d", json.dumps(payload, ensure_ascii=False)]
+    try:
+        out = subprocess.run(cmd, capture_output=True, text=True, timeout=45).stdout
+    except Exception:
+        return 0, ""
+    if not out:
+        return 0, ""
+    body, _, code = out.rpartition("\n")
+    try:
+        return int(code.strip()), body
+    except ValueError:
+        return 0, body
+
+
+def _urllib(method, url, token, payload):
     data = json.dumps(payload).encode("utf-8") if payload is not None else None
-    req = urllib.request.Request(API + path, data=data, method=method)
+    req = urllib.request.Request(url, data=data, method=method)
     for k, v in UA.items():
         req.add_header(k, v)
     if token:
         req.add_header("Authorization", "Bearer %s" % token)
     if data:
         req.add_header("Content-Type", "application/json")
-    try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return r.status, json.loads(r.read().decode("utf-8") or "{}")
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", "ignore")
-        try:
-            return e.code, json.loads(body)
-        except Exception:
-            return e.code, {"message": body[:300]}
-    except Exception as e:
-        return 0, {"message": str(e)}
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.status, r.read().decode("utf-8")
+
+
+def api(method, path, token, payload=None, retries=6):
+    """调 GitHub API，返回 (status, data)。
+
+    有代理时 urllib 常报 SSL_ERROR_SYSCALL / UNEXPECTED_EOF（本机实测），
+    所以优先走 curl；curl 也没有或返回 000（连接失败）就退到 urllib，
+    两者都带重试 —— 网络抖动时代理时通时断，重试比报错有用。
+    """
+    url = API + path
+    last = (0, {"message": "unknown"})
+    for attempt in range(retries):
+        for sender in (_curl, _urllib):
+            try:
+                st, body = sender(method, url, token, payload)
+            except urllib.error.HTTPError as e:
+                st, body = e.code, e.read().decode("utf-8", "ignore")
+            except Exception as e:
+                st, body = 0, str(e)
+
+            if st == 0 and sender is _curl:
+                continue          # curl 没装上或连不上，换 urllib 试试
+            if st == 0:
+                last = (0, {"message": body if isinstance(body, str) else ""})
+                break             # urllib 也连不上 → 判定为网络抖动，等下一轮重试
+
+            try:
+                return st, json.loads(body or "{}")
+            except Exception:
+                return st, {"message": str(body)[:300]}
+
+        if attempt < retries - 1:
+            time.sleep(3)
+    return last
 
 
 def git(*args, **kw):
@@ -189,21 +238,32 @@ def push(owner, name, token, branch):
         git("branch", "-M", branch)
     ok("分支：%s" % branch)
 
-    # 用临时 header 推送，避免 Token 落进 .git/config
-    auth = base64.b64encode(("%s:%s" % (owner, token)).encode()).decode()
+    # 凭据走 URL 内嵌，不走 http.extraheader ——
+    # 实测在有 http_proxy 的机器上 extraheader 会被吞掉，git 转而去问「Username for ...」
+    # 然后卡在交互输入上。推完立刻把 remote 改回无凭据地址，Token 不会留在 .git/config。
+    clean_url = url
+    auth_url = "https://%s:%s@github.com/%s/%s.git" % (owner, token, owner, name)
     env = dict(os.environ)
     env["GIT_ASKPASS"] = "true"
-    env["GIT_TERMINAL_PROMPT"] = "0"
-    r = subprocess.run(
-        ["git", "-c", "http.extraheader=AUTHORIZATION: basic %s" % auth,
-         "push", "-u", "origin", branch],
-        capture_output=True, text=True, env=env)
+    env["GIT_TERMINAL_PROMPT"] = "0"   # 绝不交互等待，否则进程会挂死
 
-    if r.returncode == 0:
-        ok("推送成功")
-        return True
+    for attempt in range(1, 7):
+        git("remote", "set-url", "origin", auth_url)
+        r = subprocess.run(["git", "push", "-u", "origin", branch],
+                           capture_output=True, text=True, env=env)
+        out = (r.stdout or "") + (r.stderr or "")
+        if r.returncode == 0 or "Everything up-to-date" in out:
+            ok("推送成功")
+            git("remote", "set-url", "origin", clean_url)
+            return True
+        # 代理时通时断：SSL_ERROR_SYSCALL / Connection reset 都是可重试的
+        if attempt < 6:
+            warn("第 %d 次推送失败（网络抖动），3 秒后重试…" % attempt)
+            print("    %s" % out.strip().splitlines()[-1][:160])
+            time.sleep(3)
+
     err = (r.stderr or r.stdout or "").strip()
-    fail("推送失败")
+    fail("推送失败（已重试 6 次）")
     print("\n  %s\n" % err[:500])
     if "403" in err or "401" in err:
         warn("多半是 Token 没勾 repo 权限，重新生成时勾上它。")
