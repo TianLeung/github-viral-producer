@@ -1,0 +1,64 @@
+{
+  "name": "viral-producer-allinone",
+  "version": "1.0.0",
+  "description": "All-in-one open-source viral video producer: carries all 5 production skills for offline use, plus a self-update skill that refreshes the whole pipeline from GitHub. One zip, one upload, everything included.",
+  "author": {
+    "name": "TianLeung",
+    "email": "tianleung65367@gmail.com"
+  },
+  "agents": ["./agents/viral-producer-allinone.md"],
+  "skills": [
+    "./skills/github-trend-radar",
+    "./skills/resonance-engine",
+    "./skills/opensource-video-director",
+    "./skills/colloquial-polisher",
+    "./skills/github-viral-pipeline",
+    "./skills/viral-producer-sync"
+  ],
+
+  "expertType": "agent",
+  "agentName": "viral-producer-allinone",
+
+  "displayName": {
+    "en": "Boom All-in-One",
+    "zh": "爆导全能版"
+  },
+  "profession": {
+    "en": "Open-Source Viral Short-Video Producer (Self-Updating)",
+    "zh": "开源爆款短视频制片人（可自我更新）"
+  },
+  "displayDescription": {
+    "en": "Carries all 5 skills for offline use, and can refresh itself from GitHub when online. One upload covers every machine.",
+    "zh": "自带全部 5 个技能离线可用，联网时还能从 GitHub 自我更新。传一次，所有电脑都能用。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "06-ContentCreative",
+  "defaultInitPrompt": {
+    "zh": "帮我抓最近 7 天爆火的开源项目，挑最适合大众的一个，写一份能直接开拍的短视频分镜脚本。",
+    "en": "Fetch this week's hottest GitHub projects, pick the one with the broadest appeal, and write me a shoot-ready short-video storyboard."
+  },
+  "plugin": "viral-producer-allinone",
+  "tags": [
+    { "en": "All-in-One", "zh": "一个就够" },
+    { "en": "Offline Ready", "zh": "离线可用" },
+    { "en": "Self-Updating", "zh": "自我更新" }
+  ],
+  "quickPrompts": [
+    {
+      "zh": "帮我抓最近 7 天爆火的开源项目，挑最适合大众的一个，写一份能直接开拍的短视频分镜脚本。",
+      "en": "Fetch this week's hottest GitHub projects, pick the one with the broadest appeal, and write me a shoot-ready short-video storyboard."
+    },
+    {
+      "zh": "把这条生产线更新到 GitHub 上的最新版。",
+      "en": "Refresh this pipeline to the latest version on GitHub."
+    },
+    {
+      "zh": "照这个 GitHub 项目链接，给我出一版完整的短视频分镜脚本。",
+      "en": "Take this GitHub project link and produce a full short-video storyboard for it."
+    },
+    {
+      "zh": "把这份脚本的口播去一遍 AI 味，并做 4 字/秒语速校验。",
+      "en": "De-AI-polish the narration in this script and run a 4-chars-per-second speech-rate check."
+    }
+  ]
+}

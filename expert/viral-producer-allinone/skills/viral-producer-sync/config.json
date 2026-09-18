@@ -1,0 +1,12 @@
+{
+  "owner": "TianLeung",
+  "repo": "github-viral-producer",
+  "branch": "main",
+  "public": true,
+  "localDir": "",
+  "_说明": {
+    "owner/repo/branch": "远程仓库坐标，bootstrap.py 据此拼下载地址",
+    "public": "true=公开仓库，下载免认证；改成私有仓库需把这里设 false 并在运行时传 --token",
+    "localDir": "留空则默认装到用户主目录下同名文件夹；想指定位置就填绝对路径"
+  }
+}

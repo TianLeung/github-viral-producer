@@ -29,38 +29,52 @@ DIST = REPO / "dist"
 EXCLUDE_DIRS = {"__pycache__", ".git", ".DS_Store"}
 EXCLUDE_FILES = {".DS_Store", ".gitkeep"}
 
-# 两个专家包：技能来源目录不同
+# 三个专家包：技能来源目录不同（skills_src 可以是单个目录名，也可以是列表 = 多来源合并）
 #   github-viral-producer     完整包，技能来自 skills/（含占位符，导入后要跑 sync.py）
 #   viral-producer-bootstrap  引导包，技能来自 bootstrap/（只负责去 GitHub 拉全套）
+#   viral-producer-allinone   全能包，skills/ + bootstrap/ 合并
+#                             → 一个 zip 就同时具备"离线可用"和"联网自我更新"
 PACKAGES = {
+    "viral-producer-allinone": {
+        "skills_src": ["skills", "bootstrap"],
+        "title": "爆导全能版（离线 + 可自我更新，推荐只传这一个）",
+    },
     "github-viral-producer": {
         "skills_src": "skills",
-        "title": "开源爆款短视频制片人（完整版）",
+        "title": "爆导（完整离线版）",
     },
     "viral-producer-bootstrap": {
         "skills_src": "bootstrap",
-        "title": "生产线装配工（远程安装版）",
+        "title": "装配工（远程安装版）",
     },
 }
 
 
 def refresh_from_repo(name, cfg):
-    """把仓库里最新的技能同步进专家包源码，保证 zip 是最新版。"""
-    src_skills = REPO / cfg["skills_src"]
-    dst_skills = REPO / "expert" / name / "skills"
-    if not src_skills.is_dir():
-        print("  [ERROR] 找不到 %s" % src_skills)
-        return False
+    """把仓库里最新的技能同步进专家包源码，保证 zip 是最新版。
 
+    skills_src 可以是单个目录名，也可以是列表（多来源合并，用于全能包）。
+    """
+    sources = cfg["skills_src"]
+    if isinstance(sources, str):
+        sources = [sources]
+
+    dst_skills = REPO / "expert" / name / "skills"
     dst_skills.mkdir(parents=True, exist_ok=True)
     copied = []
-    for d in sorted(p for p in src_skills.iterdir() if p.is_dir()):
-        dst = dst_skills / d.name
-        if dst.exists():
-            shutil.rmtree(dst)
-        shutil.copytree(d, dst)
-        copied.append(d.name)
-    print("  同步 %d 个技能：%s" % (len(copied), "、".join(copied)))
+    for src_name in sources:
+        src_skills = REPO / src_name
+        if not src_skills.is_dir():
+            print("  [ERROR] 找不到 %s" % src_skills)
+            return False
+        for d in sorted(p for p in src_skills.iterdir() if p.is_dir()):
+            dst = dst_skills / d.name
+            if dst.exists():
+                shutil.rmtree(dst)
+            shutil.copytree(d, dst)
+            copied.append(d.name)
+    print("  同步 %d 个技能（来源 %s）：%s"
+          % (len(copied), " + ".join(sources), "、".join(copied)))
     return True
 
 
@@ -152,10 +166,12 @@ def main():
     for p in made:
         print("✅ %s" % p)
     print("")
-    print("换电脑的两条路：")
-    print("  ① 导入 viral-producer-bootstrap.zip（48KB）→ 说「装一下生产线」，自动拉最新全套")
-    print("  ② 导入 github-viral-producer.zip（520KB）→ 离线直接用，但版本是打包时的")
-    print("     导入完整包后记得跑一次专家包里的 sync.py")
+    print("换电脑怎么选：")
+    print("  ★ 只传一个 → viral-producer-allinone.zip（约 540KB）")
+    print("     自带 5 个技能离线可用，联网时还能从 GitHub 自我更新。")
+    print("     导入后跑一次包里的 sync.py 写回本机路径。")
+    print("  ① viral-producer-bootstrap.zip（20KB）→ 说「装一下生产线」，联网拉最新全套")
+    print("  ② github-viral-producer.zip（520KB）→ 离线直接用，但版本固定在打包时")
     print("=" * 58)
     return 0
 
